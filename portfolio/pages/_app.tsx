@@ -1,9 +1,21 @@
 import './../styles/global.css'
 import type { AppProps } from 'next/app'
+import AOS from "aos"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useEffect } from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
-	const linkClass: string = "px-4 py-2 font-semibold text-gray-600 rounded hover:text-black hover:underline"
+	useEffect(() => {
+		AOS.init()
+	}, [])
+	const link: string = "px-4 py-2 font-semibold rounded hover:text-black"
+	const linkClass: (path: string) => string = (path: string) => {
+		return router.pathname == path
+			? `${link} text-black font-extrabold`
+			: `${link} text-gray-400`
+	}
+	const router = useRouter()
 	return (
 		<>
 			<header className="sticky top-0 z-30 w-full px-2 py-4 bg-white sm:px-4 shadow-xl">
@@ -13,13 +25,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 					</div>
 					<div className="flex items-center space-x-1">
 						<ul className="hidden space-x-2 md:inline-flex">
-							<li><Link href={"/"}><a className={linkClass}>Home</a></Link></li>
-							<li><Link href={"/bio"}><a className={linkClass}>Bio</a></Link></li>
-							<li><Link href={"/experiences"}><a className={linkClass}>Experiences</a></Link></li>
-							<li><Link href={"/about"}><a className={linkClass}>About Me</a></Link></li>
-							<li><Link href={"/passion"}><a className={linkClass}>My Passion</a></Link></li>
-							<li><Link href={"/projects"}><a className={linkClass}>Personal Projects</a></Link></li>
-							<li><Link href={"/contact"}><a className={linkClass}>Contact</a></Link></li>
+							<li><Link href={"/"}><a className={linkClass("/")}>Home</a></Link></li>
+							<li><Link href={"/bio"}><a className={linkClass("/bio")}>Bio</a></Link></li>
+							<li><Link href={"/experiences"}><a className={linkClass("/experiences")}>Experiences</a></Link></li>
+							<li><Link href={"/about"}><a className={linkClass("/about")}>About Me</a></Link></li>
+							<li><Link href={"/passion"}><a className={linkClass("/passion")}>My Passion</a></Link></li>
+							<li><Link href={"/projects"}><a className={linkClass("/projects")}>Personal Projects</a></Link></li>
+							<li><Link href={"/contact"}><a className={linkClass("/contact")}>Contact</a></Link></li>
 						</ul>
 						<div className="inline-flex md:hidden">
 							<button className="flex-none px-2 ">
@@ -34,11 +46,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 				</div>
 			</header>
 
-			<section className="p-4 mx-auto max-w-7xl">
+			<section className="w-screen p-4 bg-gray-100">
 				<div className="mx-auto font-sans">
-					<div className="bg-gray-100">
-						<Component {...pageProps} />
-					</div>
+					<Component {...pageProps} />
 				</div>
 			</section>
 		</>
